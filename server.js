@@ -9,11 +9,11 @@ const app = express();
 
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static('public'));
 const initializePassport = require("./passportConfig");
 initializePassport(passport);
 
 // Middleware
+app.use(express.static('public'));
 
 // Parses details from a form
 app.use(express.urlencoded({ extended: false }));
@@ -29,7 +29,7 @@ app.use(
     saveUninitialized: false
   })
 );
-// Funtion inside passport which initializes passport
+// Function inside passport which initializes passport
 app.use(passport.initialize());
 // Store our variables to be persisted across the whole session. Works with app.use(Session) above
 app.use(passport.session());
@@ -43,10 +43,22 @@ app.get("/users/register", checkAuthenticated, (req, res) => {
   res.render("register.ejs");
 });
 
+app.get("/users/html_quiz", (req, res) => {
+  res.render("html_quiz.ejs");
+});
+
+app.get("/users/css_quiz", (req, res) => {
+  res.render("css_quiz.ejs");
+});
+
 app.get("/users/login", checkAuthenticated, (req, res) => {
   // flash sets a messages variable. passport sets the error message
   console.log(req.session.flash.error);
   res.render("login.ejs");
+});
+
+app.get("/users/contact", checkAuthenticated, (req, res) => {
+  res.render("contact.ejs");
 });
 
 app.get("/users/dashboard", checkNotAuthenticated, (req, res) => {
